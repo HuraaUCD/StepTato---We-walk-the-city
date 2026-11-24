@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StepTato prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: friendly, plain, student project; short lines people read on a phone after scanning a poster
+   IDEA: the poster's companion leaflet: the app itself, held in your hand
+   PICTURE: three phone screens of the prototype, side by side (swipe on a phone)
+   COLOUR and TYPE: cream, sage, forest green, mustard accent; Fredoka headings, Nunito body
+   LAYOUT: title, phones, then short sections: idea, survey, shared goal, limits */
+:root{color-scheme:light dark;
+--bg:light-dark(#FAF6E8,#141a12);--card:light-dark(#FFFDF6,#1d2519);--line:light-dark(#E5E0C6,#334030);
+--ink:light-dark(#33352B,#ECEBDF);--head:light-dark(#2F4F2A,#CFE0A8);--muted:light-dark(#5F6152,#B3B5A3);
+--sage:light-dark(#E6ECCF,#263321);--track:light-dark(#ECE7D0,#2c3628);--accent:#E3B23C;--green:#7C9A45;--deep:#3E5C2C;--navy:#2C3E66}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Nunito,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Fredoka,Nunito,sans-serif;color:var(--head);margin:0;line-height:1.05;text-wrap:balance}
+p{margin:0}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 40px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo h1{font-size:clamp(44px,8vw,72px);font-weight:700}
+.tag{font-family:Fredoka,sans-serif;font-weight:600;font-size:22px;color:var(--deep);margin-top:4px}
+:root[data-theme=dark] .tag{color:#B9CF8A}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .tag{color:#B9CF8A}}
+.lede{max-width:520px;font-size:17px}
+.lede small{display:block;color:var(--muted);font-size:14px;margin-top:8px}
+/* phones */
+.stage{background:var(--sage);border-radius:32px;padding:28px 18px 18px;margin-top:28px}
+.phones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;justify-items:center}
+.ph{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+.ph figcaption{font-family:Fredoka,sans-serif;font-weight:600;font-size:18px;color:var(--head);text-align:center}
+.ph figcaption span{display:block;font-family:Nunito,sans-serif;font-weight:600;font-size:14px;color:var(--muted)}
+.dev{width:100%;max-width:300px;aspect-ratio:9/18;border:7px solid #2F4F2A;border-radius:38px;background:#FAF6E8;color:#33352B;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 10px 24px rgba(47,79,42,.18)}
+.scr{flex:1;padding:16px 12px 8px;display:flex;flex-direction:column;gap:9px;font-size:12px}
+.bar{display:flex;justify-content:space-between;align-items:center}
+.t1{font-family:Fredoka,sans-serif;font-weight:600;font-size:18px;color:#2F4F2A}
+.pill{display:inline-flex;align-items:center;gap:4px;background:#FFFDF6;border:1.5px solid #E5E0C6;border-radius:99px;padding:3px 9px 3px 5px;font-family:Fredoka,sans-serif;font-weight:600;font-size:14px;color:#2F4F2A}
+.view{position:relative;background:#E6ECCF;border-radius:20px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px;overflow:hidden}
+.view::after{content:"";position:absolute;left:-10%;right:-10%;bottom:-30px;height:70px;border-radius:50%;background:#D3DFAE}
+.view img{position:relative;z-index:1}
+.lv{position:absolute;left:8px;top:8px;z-index:2;background:#2F4F2A;color:#fff;border-radius:99px;padding:2px 9px;font-family:Fredoka,sans-serif;font-size:11px}
+.bub{position:absolute;right:8px;top:30px;z-index:2;max-width:96px;background:#FFFDF6;border:1.5px solid #E5E0C6;border-radius:12px 12px 3px 12px;padding:5px 7px;font-size:10.5px;font-weight:800;color:#2F4F2A;line-height:1.3}
+.track{height:8px;border-radius:99px;background:#ECE7D0;overflow:hidden}.track i{display:block;height:100%;border-radius:99px;background:#7C9A45}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.st{background:#FFFDF6;border:1.5px solid #E5E0C6;border-radius:12px;padding:6px;text-align:center}
+.st b{display:block;font-family:Fredoka,sans-serif;font-weight:600;font-size:14px;color:#2F4F2A}.st{font-size:10px;font-weight:700;color:#5F6152}
+.row{display:flex;align-items:center;gap:8px;background:#FFFDF6;border:1.5px solid #E5E0C6;border-radius:14px;padding:7px 9px}
+.row.on{border:2.5px solid #3E5C2C}
+.ic{width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;font-family:Fredoka,sans-serif;font-weight:700;color:#2F4F2A}
+.row .n{flex:1}.row .n b{display:block;font-family:Fredoka,sans-serif;font-weight:600;font-size:13px;color:#2F4F2A}.row .n{font-size:10px;color:#5F6152;font-weight:600}
+.rw{font-size:10px;font-weight:800;color:#2F4F2A;background:#E6ECCF;border-radius:99px;padding:2px 7px}
+.go{background:#3E5C2C;color:#fff;border-radius:99px;padding:6px 11px;font-family:Fredoka,sans-serif;font-size:12px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:#ECE7D0;border-radius:99px;padding:3px;gap:3px}
+.seg span{text-align:center;border-radius:99px;padding:5px 0;font-family:Fredoka,sans-serif;font-weight:600;font-size:12px;color:#2F4F2A}.seg .on{background:#3E5C2C;color:#fff}
+.items{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.it{position:relative;background:#FFFDF6;border:1.5px solid #E5E0C6;border-radius:12px;padding:6px 3px 5px;text-align:center;font-size:9.5px;font-weight:800;color:#2F4F2A;line-height:1.15}
+.it.hot{border:2.5px solid var(--accent)}
+.it .sq{height:40px;display:grid;place-items:center}.it img{max-height:36px;max-width:52px;image-rendering:pixelated}
+.it em{display:block;font-style:normal;font-weight:700;color:#5F6152;font-size:9px}
+.hotl{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#2F4F2A;color:#fff;font-size:8px;letter-spacing:.06em;border-radius:99px;padding:1px 6px;white-space:nowrap}
+.map{position:relative;height:120px;border-radius:16px;overflow:hidden;border:1.5px solid #E5E0C6}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);border-top:1.5px solid #E5E0C6;background:#FFFDF6;padding:7px 4px 9px;font-size:10px;font-weight:700;color:#5F6152;text-align:center}
+.nav .on{color:#2F4F2A;font-weight:800}.nav .on::before{content:"";display:block;width:34px;height:5px;margin:0 auto 4px;border-radius:99px;background:#7C9A45}
+.nav span::before{content:"";display:block;width:34px;height:5px;margin:0 auto 4px}
+.ctl{display:none;justify-content:center;gap:10px;margin-top:14px}
+.ctl button{min-width:44px;min-height:44px;border-radius:99px;border:2px solid var(--deep);background:var(--card);color:var(--head);font:700 15px Nunito,sans-serif;padding:0 16px;cursor:pointer}
+.ctl button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.note{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+/* sections */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+.card h2{font-size:28px;font-weight:600}
+.stat{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:4px 12px;align-items:center}
+.stat p{font-size:15px}.stat b{font-family:Fredoka,sans-serif;font-size:22px;color:var(--head);text-align:right;white-space:nowrap}
+.stat .track{grid-column:1/-1;height:10px;background:var(--track)}
+.steps{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.chip{background:var(--sage);color:var(--head);font-weight:800;font-size:14px;border-radius:99px;padding:6px 12px;white-space:nowrap}
+.arrow{color:var(--green);font-weight:800}
+.big{grid-column:1/-1;background:var(--deep);border-color:var(--deep);color:#F2F5E6;flex-direction:row;align-items:center;gap:20px}
+.big h2{color:#fff}.big img{width:120px;flex:none}
+footer{font-size:14px;color:var(--muted)}
+@media (max-width:860px){
+ .phones{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;padding-bottom:6px;justify-items:initial}
+ .ph{flex:0 0 78%;scroll-snap-align:center}
+ .ctl{display:flex}
+ .cols{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:600px){.big{flex-direction:column;text-align:center}}
+@media (prefers-reduced-motion:no-preference){.dev{transition:transform .25s}.ph:hover .dev{transform:translateY(-4px)}}
+</style>
+</head>
+<body>
+<header class="band"><div class="wrap">
+  <div class="top">
+    <div>
+      <div class="logo">
+        <svg width="56" height="56" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44V22" stroke="#2F4F2A" stroke-width="4" stroke-linecap="round"/><path d="M24 24C24 14 17 9 6 9C6 20 13 24 24 24Z" fill="#7C9A45" stroke="#2F4F2A" stroke-width="3"/><path d="M24 28C24 18 31 13 42 13C42 24 35 28 24 28Z" fill="#9DB85E" stroke="#2F4F2A" stroke-width="3"/></svg>
+        <h1>StepTato</h1>
+      </div>
+      <p class="tag">Walk. Earn. Grow.</p>
+    </div>
+    <p class="lede">A gamified concept app that makes walking the fun choice for short, suitable trips. Your potato levels up as you walk, from couch potato to fit potato.
+      <small>Khurnemekh Altansukh · MSc Urban Data Analytics · University College Dublin</small></p>
+  </div>
+
+  <div class="stage">
+    <div class="phones" id="phones">
+      <!-- HOME -->
+      <figure class="ph" style="margin:0">
+        <div class="dev" role="img" aria-label="Home screen: your Tato at level 3, 8,432 steps today and a Lake Lap quest">
+          <div class="scr">
+            <div class="bar"><span class="t1">Hi, Khurnemekh</span><span class="pill"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#E6ECCF"/><path d="M12 19v-7" stroke="#2F4F2A" stroke-width="2"/><path d="M12 12c0-3-2-5-6-5 0 3 2 5 6 5z" fill="#7C9A45"/><path d="M12 13c0-3 2-5 6-5 0 3-2 5-6 5z" fill="#9DB85E"/></svg>860</span></div>
+            <div class="view" style="height:46%"><span class="lv">Lv.3 · On a roll</span><span class="bub">Not bad! That's a coffee closer.</span><img src="img/lv3.png" alt="" style="height:76%"></div>
+            <div class="bar"><span class="t1" style="font-size:20px">8,432 <small style="font-size:11px;color:#5F6152;font-family:Nunito">steps</small></span><span style="font-size:10px;font-weight:700;color:#5F6152">Lv.4 in 1,568 XP</span></div>
+            <div class="track"><i style="width:72%"></i></div>
+            <div class="g3"><div class="st"><b>6.1 km</b>walked</div><div class="st"><b>+86</b>Sprouts</div><div class="st"><b>2 / 3</b>quests</div></div>
+            <div class="row"><span class="ic" style="background:#DCE6EE">L</span><span class="n"><b>Lake Lap</b>1.4 km · 18 min · +120</span><span class="go">Start</span></div>
+          </div>
+          <div class="nav"><span class="on">Home</span><span>Journeys</span><span>My Tato</span></div>
+        </div>
+        <figcaption>Home<span>Your Tato, today's steps and next quest</span></figcaption>
+      </figure>
+      <!-- CUSTOMISE -->
+      <figure class="ph" style="margin:0">
+        <div class="dev" role="img" aria-label="Customise screen: Tato in a UCD hoodie and a grid of trending items">
+          <div class="scr">
+            <div class="bar"><span class="t1">My Tato</span><span class="pill"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#E6ECCF"/><path d="M12 19v-7" stroke="#2F4F2A" stroke-width="2"/><path d="M12 12c0-3-2-5-6-5 0 3 2 5 6 5z" fill="#7C9A45"/><path d="M12 13c0-3 2-5 6-5 0 3-2 5-6 5z" fill="#9DB85E"/></svg>860</span></div>
+            <div class="view" style="height:34%"><img src="img/o_hoodie.png" alt="" style="height:80%"></div>
+            <div class="seg"><span>Outfits</span><span class="on">Items</span></div>
+            <div class="items">
+              <div class="it hot"><span class="hotl">TRENDING</span><div class="sq"><img src="img/jacket.png" alt=""></div>Tech CEO Jacket<em>30 Sprouts</em></div>
+              <div class="it"><div class="sq"><img src="img/sunglasses.png" alt=""></div>CEO Sunglasses<em>8 Sprouts</em></div>
+              <div class="it"><div class="sq"><img src="img/crown.png" alt=""></div>Unemployed Royalty<em>25 Sprouts</em></div>
+              <div class="it"><div class="sq"><img src="img/jumper.png" alt=""></div>Ugly Xmas Jumper<em>15 Sprouts</em></div>
+              <div class="it"><div class="sq"><img src="img/poncho.png" alt=""></div>Ireland Said No<em>12 Sprouts</em></div>
+              <div class="it"><div class="sq"><img src="img/pint.png" alt=""></div>The Black Stuff<em>5 Sprouts</em></div>
+            </div>
+          </div>
+          <div class="nav"><span>Home</span><span>Journeys</span><span class="on">My Tato</span></div>
+        </div>
+        <figcaption>Customise<span>Spend Sprouts on items that follow online trends</span></figcaption>
+      </figure>
+      <!-- JOURNEYS -->
+      <figure class="ph" style="margin:0">
+        <div class="dev" role="img" aria-label="Short journeys screen: a map with a walking route and four nearby quests under 20 minutes">
+          <div class="scr">
+            <div class="bar"><span class="t1">Short journeys</span></div>
+            <div class="seg"><span class="on">Suggested</span><span>Plan my own</span></div>
+            <div class="map"><svg viewBox="0 0 354 176" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="354" height="176" fill="#EEF1DE"/><path d="M-10 120 L120 96 L230 110 L370 70" stroke="#FFFDF6" stroke-width="12" fill="none"/><path d="M150 -10 L170 80 L150 190" stroke="#FFFDF6" stroke-width="10" fill="none"/><path d="M20 20 Q70 0 110 30 Q120 70 70 72 Q20 70 20 20 Z" fill="#C9D9A0"/><ellipse cx="262" cy="140" rx="62" ry="26" fill="#BFD3E0"/><path d="M58 128 Q120 140 168 104 T262 112" stroke="#3E5C2C" stroke-width="5" stroke-dasharray="2 10" stroke-linecap="round" fill="none"/><path d="M262 106 c0 -10 -14 -12 -14 -22 a14 14 0 0 1 28 0 c0 10 -14 12 -14 22z" fill="#C8543E"/><circle cx="262" cy="84" r="5" fill="#FFFDF6"/></svg></div>
+            <div class="row on"><span class="ic" style="background:#DCE6EE">L</span><span class="n"><b>Lake Lap</b>Campus · 1.4 km · 18 min</span><span class="rw">+120</span></div>
+            <div class="row"><span class="ic" style="background:#E6ECCF">G</span><span class="n"><b>Touch Grass</b>Park · 0.8 km · 10 min</span><span class="rw">+20</span></div>
+            <div class="row"><span class="ic" style="background:#F3E6CC">C</span><span class="n"><b>Cultured Potato</b>Landmark · 1.2 km · 15 min</span><span class="rw">+30</span></div>
+            <div class="row"><span class="ic" style="background:#EEDFD3">K</span><span class="n"><b>Coffee Run</b>Café · 0.6 km · 8 min</span><span class="rw">+15</span></div>
+          </div>
+          <div class="nav"><span>Home</span><span class="on">Journeys</span><span>My Tato</span></div>
+        </div>
+        <figcaption>Short journeys<span>Nearby quests, and a check that a trip suits walking today</span></figcaption>
+      </figure>
+    </div>
+    <div class="ctl"><button type="button" id="prev" aria-label="Previous screen">← Prev</button><button type="button" id="next" aria-label="Next screen">Next →</button></div>
+  </div>
+  <p class="note">Concept mock-ups of a visual prototype. Names, prices and step counts are illustrative.</p>
+</div></header>
+
+<main class="band" style="padding-top:0"><div class="wrap cols">
+  <section class="card">
+    <h2>The idea</h2>
+    <p>Short, walkable trips around campus still often go by bus or car. TFI Smarter Travel aims to make active travel the easy choice, and these short trips are the easiest win.</p>
+    <p><b>Research question:</b> can gamification make people more likely to choose walking for suitable short journeys?</p>
+    <div class="steps"><span class="chip">Walk a quest</span><span class="arrow">→</span><span class="chip">Earn Sprouts</span><span class="arrow">→</span><span class="chip">Grow your Tato</span><span class="arrow">→</span><span class="chip">Connect</span></div>
+  </section>
+
+  <section class="card">
+    <h2>What 96 people told us</h2>
+    <div class="stat"><p>Often or sometimes pick another mode for a walkable trip</p><b>54%</b><div class="track"><i style="width:54.2%;background:#3E5C2C"></i></div></div>
+    <div class="stat"><p>See weather as a barrier to walking</p><b>77%</b><div class="track"><i style="width:76.8%;background:#2C3E66"></i></div></div>
+    <div class="stat"><p>Would value coffee or food vouchers as rewards</p><b>70%</b><div class="track"><i style="width:69.5%;background:#E3B23C"></i></div></div>
+    <div class="stat"><p>Would try StepTato (rated 4–5 out of 5)</p><b>47%</b><div class="track"><i style="width:47.4%;background:#7C9A45"></i></div></div>
+    <p style="font-size:13px;color:var(--muted)">UCD-connected online survey, 96 responses (52/96, 73/95, 66/95, 45/95). Self-reported intentions, not measured behaviour.</p>
+  </section>
+
+  <section class="card">
+    <h2>Grow it together</h2>
+    <p>Every walk adds Sprouts to your school's virtual garden, from seedling to garden to grove, and every school feeds one UCD-wide grove. Schools are ranked per active walker, so small schools can win too.</p>
+    <p style="font-size:14px;color:var(--muted)">40% said sharing progress or challenges with friends would get them walking more. The garden is virtual; it doesn't plant real trees.</p>
+  </section>
+
+  <section class="card">
+    <h2>Limits and what's next</h2>
+    <p>This is a visual prototype built on stated intentions, and no app can fix the weather. A small pilot with user testing would show whether people really walk more.</p>
+    <div class="steps"><span class="chip">One school</span><span class="arrow">→</span><span class="chip">All of UCD</span><span class="arrow">→</span><span class="chip">Other campuses</span></div>
+    <p>With official backing, Sprouts could unlock real partner rewards.</p>
+  </section>
+
+  <section class="card big">
+    <img src="img/muscle.png" alt="The Fit Potato, StepTato's level 5 mascot">
+    <div><h2>Small steps. Big change.</h2><p style="margin-top:8px">Thanks for scanning. StepTato is a student concept for the TFI Smarter Travel Student Awards.</p></div>
+  </section>
+</div></main>
+
+<footer class="band" style="padding-top:0"><div class="wrap">StepTato · student concept project, University College Dublin, 2026. Not a released app.</div></footer>
+
+<script>
+{
+  const box = document.getElementById('phones');
+  const cards = Array.from(box.querySelectorAll('.ph'));
+  let i = 0;
+  const show = (n) => { i = Math.max(0, Math.min(cards.length - 1, n)); cards[i].scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest', inline: 'center'}); };
+  document.getElementById('prev').addEventListener('click', () => show(i - 1));
+  document.getElementById('next').addEventListener('click', () => show(i + 1));
+  box.addEventListener('scroll', () => { const mid = box.scrollLeft + box.clientWidth / 2; let best = 0, d = 1e9; cards.forEach((c, k) => { const m = c.offsetLeft + c.offsetWidth / 2; if (Math.abs(m - mid) < d) { d = Math.abs(m - mid); best = k; } }); i = best; }, {passive: true});
+  document.addEventListener('keydown', (e) => { if (e.target.closest('input,textarea')) return; if (e.key === 'ArrowLeft') show(i - 1); if (e.key === 'ArrowRight') show(i + 1); });
+}
+</script>
+</body>
+</html>
